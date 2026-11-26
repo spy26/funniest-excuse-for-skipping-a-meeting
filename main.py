@@ -78,6 +78,10 @@ def main(argv):
         sys.stderr.write("error: %s\n" % problem)
         return 1
     digest = hashlib.sha256(payload).hexdigest()
+    text = payload.decode("utf-8")
+    if "\n" in text or "\r" in text or len(text) > CHAR_LIMIT:
+        sys.stderr.write("error: final entry failed the line/length gate\n")
+        return 1
     print(
         "wrote %s (%d characters, %d bytes, sha256 %s)"
         % (path, len(EXCUSE), len(payload), digest)
